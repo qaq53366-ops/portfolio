@@ -1,0 +1,303 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>橙猫猫 · 作品集</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;
+      background:#f8f7f4;color:#1a1a1a;line-height:1.7;overflow-x:hidden
+    }
+    a{text-decoration:none;color:inherit}
+    ul{list-style:none}
+    img{max-width:100%;display:block}
+    .container{max-width:1100px;margin:0 auto;padding:0 28px}
+
+    /* Header */
+    header{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 0;transition:.35s}
+    header.scrolled{background:rgba(248,247,244,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+    header .container{display:flex;align-items:center;justify-content:space-between}
+    .logo{font-weight:700;font-size:1.15rem;letter-spacing:.5px;color:#a3a3a3;transition:color .3s}
+    .logo:hover{color:#1a1a1a}
+    nav{display:flex;gap:36px}
+    nav a{font-size:.85rem;font-weight:500;color:#a3a3a3;letter-spacing:.4px;transition:color .3s;position:relative}
+    nav a:hover{color:#1a1a1a}
+    nav a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1.5px;background:#d87d4a;transition:width .35s}
+    nav a:hover::after{width:100%}
+
+    /* Hero — 极致简约 */
+    .hero{
+      min-height:100vh;display:flex;align-items:center;justify-content:center;
+      padding:120px 0 80px;position:relative;background:#f8f7f4
+    }
+    .hero-inner{text-align:center;max-width:800px}
+    .hero-number{
+      font-size:.75rem;font-weight:500;letter-spacing:3px;color:#c2beb6;
+      margin-bottom:32px
+    }
+    .hero h1{
+      font-family:'Inter','Noto Sans SC',sans-serif;
+      font-size:clamp(4rem,10vw,7.5rem);font-weight:300;letter-spacing:-3px;
+      color:#1a1a1a;line-height:1;margin-bottom:20px
+    }
+    .hero h1 .accent{font-weight:600;color:#d87d4a}
+    .hero-divider{
+      width:40px;height:2px;background:#d87d4a;margin:28px auto
+    }
+    .hero .sub{
+      font-size:1rem;color:#8a867e;letter-spacing:2px;font-weight:300;
+      margin-bottom:48px
+    }
+    .hero .sub em{font-style:normal;color:#1a1a1a;font-weight:500}
+    .hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .btn{
+      padding:13px 36px;border-radius:100px;font-size:.85rem;font-weight:500;
+      transition:all .35s;cursor:pointer;letter-spacing:.5px;border:none
+    }
+    .btn-primary{background:#1a1a1a;color:#fff}
+    .btn-primary:hover{background:#d87d4a;transform:translateY(-2px)}
+    .btn-outline{background:transparent;color:#1a1a1a;border:1.5px solid #d4d0c8}
+    .btn-outline:hover{border-color:#1a1a1a;transform:translateY(-2px)}
+
+    /* 滚动提示 */
+    .scroll-hint{
+      position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
+      display:flex;flex-direction:column;align-items:center;gap:8px;
+      color:#c2beb6;font-size:.7rem;letter-spacing:2px;text-transform:uppercase
+    }
+    .scroll-line{width:1px;height:40px;background:#d4d0c8;animation:scrollLine 2.2s ease-in-out infinite}
+    @keyframes scrollLine{
+      0%,100%{opacity:1;transform:scaleY(1);transform-origin:top}
+      50%{opacity:.3;transform:scaleY(.5);transform-origin:top}
+    }
+
+    /* Shared */
+    section{padding:120px 0}
+    .section-label{
+      font-size:.7rem;font-weight:600;letter-spacing:3px;color:#c2beb6;
+      margin-bottom:8px;text-transform:uppercase
+    }
+    .section-title{
+      font-size:clamp(1.8rem,3vw,2.6rem);font-weight:300;letter-spacing:-.5px;
+      margin-bottom:48px;color:#1a1a1a
+    }
+    .section-title strong{font-weight:600}
+
+    /* About 左右布局 */
+    .about-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:80px;align-items:center}
+    .about-visual{
+      aspect-ratio:3/4;border-radius:4px;overflow:hidden;
+      background:linear-gradient(145deg,#ece8e0,#ddd8ce);
+      display:flex;align-items:center;justify-content:center;
+      font-size:5rem
+    }
+    .about-text p{color:#5c5a54;margin-bottom:20px;font-size:.95rem;max-width:440px}
+    .about-meta{display:flex;gap:48px;margin-top:36px;padding-top:28px;border-top:1.5px solid #e8e4dc}
+    .meta-item h3{font-size:1.8rem;font-weight:300;color:#d87d4a;letter-spacing:-1px}
+    .meta-item p{font-size:.8rem;color:#a3a3a3;margin:0;text-transform:uppercase;letter-spacing:1px}
+
+    /* Work — 大图卡片 */
+    .work-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:40px}
+    .work-card{
+      position:relative;background:#fff;border-radius:4px;overflow:hidden;
+      transition:transform .5s;cursor:pointer
+    }
+    .work-card:hover{transform:translateY(-6px)}
+    .work-card-img{
+      height:280px;display:flex;align-items:center;justify-content:center;
+      font-size:2.8rem;font-weight:300;color:#fff;letter-spacing:4px;
+      transition:transform .6s
+    }
+    .work-card:hover .work-card-img{transform:scale(1.03)}
+    .work-card-img.c1{background:linear-gradient(145deg,#d87d4a,#b5622e)}
+    .work-card-img.c2{background:linear-gradient(145deg,#4a4a4a,#2a2a2a)}
+    .work-card-img.c3{background:linear-gradient(145deg,#8a7a6a,#6b5b4b)}
+    .work-card-img.c4{background:linear-gradient(145deg,#5a6a7a,#3a4a5a)}
+    .work-card-img.c5{background:linear-gradient(145deg,#7a6a5a,#5a4a3a)}
+    .work-card-img.c6{background:linear-gradient(145deg,#6a7a6a,#4a5a4a)}
+    .work-card-body{padding:24px 0 0}
+    .work-card-body .tag{font-size:.7rem;color:#c2beb6;letter-spacing:2px;text-transform:uppercase}
+    .work-card-body h3{font-size:1.1rem;font-weight:500;margin:6px 0;letter-spacing:-.3px}
+    .work-card-body p{font-size:.85rem;color:#8a867e}
+
+    /* Skills 极简标签 */
+    .skills-list{display:flex;flex-wrap:wrap;gap:12px}
+    .skill-tag{
+      padding:10px 24px;border:1.5px solid #e8e4dc;border-radius:100px;
+      font-size:.85rem;color:#5c5a54;transition:all .35s;cursor:default
+    }
+    .skill-tag:hover{border-color:#d87d4a;color:#d87d4a;background:rgba(216,125,74,.04)}
+
+    /* Contact */
+    .contact-section{background:#1a1a1a;border-radius:4px;padding:96px 80px;text-align:center}
+    .contact-section h2{font-size:clamp(1.8rem,3vw,2.6rem);font-weight:300;color:#fff;margin-bottom:16px;letter-spacing:-.5px}
+    .contact-section p{color:#8a867e;margin-bottom:40px;font-size:.95rem}
+    .contact-section .btn-primary{background:#d87d4a}
+    .contact-section .btn-primary:hover{background:#fff;color:#1a1a1a}
+    .contact-links{display:flex;justify-content:center;gap:40px;margin-top:40px}
+    .contact-links a{color:#5c5a54;font-size:.85rem;transition:color .3s}
+    .contact-links a:hover{color:#d87d4a}
+
+    footer{padding:32px 0;text-align:center;font-size:.8rem;color:#c2beb6;letter-spacing:.5px}
+
+    /* Animations */
+    .fade-up{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+    .fade-up.visible{opacity:1;transform:translateY(0)}
+
+    /* Responsive */
+    @media(max-width:768px){
+      .about-grid{grid-template-columns:1fr;gap:40px}
+      .work-grid{grid-template-columns:1fr}
+      .contact-section{padding:56px 28px}
+      .contact-links{flex-direction:column;gap:16px}
+      .about-meta{gap:32px}
+      nav{gap:20px}
+    }
+    @media(max-width:480px){
+      header nav{display:none}
+      .hero h1{font-size:3.2rem;letter-spacing:-2px}
+      .skills-list{gap:8px}
+      .skill-tag{padding:8px 18px;font-size:.8rem}
+    }
+  </style>
+</head>
+<body>
+
+  <header id="header">
+    <div class="container">
+      <div class="logo">橙猫猫</div>
+      <nav>
+        <a href="#about">About</a>
+        <a href="#work">Work</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div class="container hero-inner">
+      <p class="hero-number">—— 01</p>
+      <h1>橙猫<span class="accent">猫</span></h1>
+      <div class="hero-divider"></div>
+      <p class="sub">Visual Designer / <em>Brand &amp; Digital</em></p>
+      <div class="hero-btns">
+        <a href="#work" class="btn btn-primary">Selected Works</a>
+        <a href="#contact" class="btn btn-outline">Get in Touch</a>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="container">
+      <p class="section-label">—— About</p>
+      <h2 class="section-title">关于<strong> 我</strong></h2>
+      <div class="about-grid">
+        <div class="about-visual fade-up">🐱</div>
+        <div class="about-text fade-up">
+          <p>我是橙猫猫，一名专注于品牌视觉与数字体验的设计师。我相信好的设计不仅是视觉上的愉悦，更是有温度的沟通方式。</p>
+          <p>6 年来，我持续为科技、时尚、生活方式等领域的品牌提供设计服务。从品牌识别到数字产品，我始终追求克制、精准且富有情感的视觉表达。</p>
+          <div class="about-meta">
+            <div class="meta-item">
+              <h3>6+</h3>
+              <p>Years</p>
+            </div>
+            <div class="meta-item">
+              <h3>80+</h3>
+              <p>Projects</p>
+            </div>
+            <div class="meta-item">
+              <h3>30+</h3>
+              <p>Clients</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Work -->
+  <section id="work">
+    <div class="container">
+      <p class="section-label">—— Selected Works</p>
+      <h2 class="section-title">精选<strong>作品</strong></h2>
+      <div class="work-grid" id="workGrid"></div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills">
+    <div class="container">
+      <p class="section-label">—— Skills</p>
+      <h2 class="section-title">专业<strong>技能</strong></h2>
+      <div class="skills-list" id="skillsList"></div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" style="padding-bottom:0">
+    <div class="container">
+      <div class="contact-section fade-up">
+        <h2>Let&rsquo;s create something.</h2>
+        <p>如果你有有趣的项目想聊聊，欢迎随时联系我。</p>
+        <a href="mailto:hello@chengmaomao.design" class="btn btn-primary">Send a Message →</a>
+        <div class="contact-links">
+          <a href="#">微信 · OrangeCat</a>
+          <a href="#">微博 · @橙猫猫</a>
+          <a href="#">站酷 · 橙猫猫</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 橙猫猫</p>
+    </div>
+  </footer>
+
+  <script>
+    const works = [
+      {title:'Aurora 品牌重塑',tag:'Brand Identity',cls:'c1',desc:'完整品牌视觉体系，涵盖 logo、色彩与应用规范。'},
+      {title:'EcoLife App',tag:'UI / UX',cls:'c2',desc:'可持续生活方式应用，从研究到高保真原型。'},
+      {title:'山时茶饮包装',tag:'Packaging',cls:'c3',desc:'东方美学与现代极简融合的系列包装设计。'},
+      {title:'Nova 线上展览',tag:'Web Design',cls:'c4',desc:'沉浸式虚拟艺术展览交互网站。'},
+      {title:'VOID 杂志',tag:'Editorial',cls:'c5',desc:'独立文化杂志视觉设计与排版系统。'},
+      {title:'Flux 动态海报',tag:'Motion',cls:'c6',desc:'音乐节系列动态海报与社交媒体视觉。'},
+    ];
+    const wg = document.getElementById('workGrid');
+    works.forEach(w => {
+      const c = document.createElement('div');
+      c.className = 'work-card fade-up';
+      c.innerHTML = '<div class="work-card-img ' + w.cls + '">' + w.title[0] + '</div><div class="work-card-body"><p class="tag">' + w.tag + '</p><h3>' + w.title + '</h3><p>' + w.desc + '</p></div>';
+      wg.appendChild(c);
+    });
+
+    const skills = ['Figma','Adobe XD','Photoshop','Illustrator','After Effects','Sketch','Cinema 4D','Blender','Procreate','Notion'];
+    const sl = document.getElementById('skillsList');
+    skills.forEach(s => {
+      const t = document.createElement('span');
+      t.className = 'skill-tag fade-up';
+      t.textContent = s;
+      sl.appendChild(t);
+    });
+
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 60));
+
+    const observer = new IntersectionObserver(e => {e.forEach(entry => {if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}})},{threshold:.15});
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
