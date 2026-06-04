@@ -72,11 +72,11 @@
       33%{transform:translate(-50px,30px) scale(1.1)}
       66%{transform:translate(40px,-35px) scale(.9)}
     }
-    .hero-grid{
+    #ibg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;display:block}.hero-grid{
       position:absolute;inset:0;
       background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
         linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
-      background-size:80px 80px;pointer-events:none
+      background-size:80px 80px;pointer-events:none;z-index:1;position:relative
     }
     .hero-fade{
       position:absolute;bottom:0;left:0;right:0;height:200px;
@@ -341,5 +341,63 @@
     const observer = new IntersectionObserver(e => {e.forEach(entry => {if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}})},{threshold:.15});
     document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
   </script>
+
+<script>
+const c = document.getElementById("ibg"), cx = c.getContext("2d");
+let W, H, mx = 0, my = 0, pts = [];
+
+function resize() { W = c.width = innerWidth; H = c.height = innerHeight; }
+onresize = resize; resize();
+
+class Pt {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * W; this.y = Math.random() * H;
+    this.s = Math.random() * 3 + 1; this.bs = this.s;
+    this.vx = (Math.random() - 0.5) * 0.3; this.vy = (Math.random() - 0.5) * 0.3;
+    this.o = Math.random() * 0.5 + 0.15;
+    this.h = Math.random() < 0.6 ? 25 + Math.random() * 15 : 30 + Math.random() * 20;
+  }
+  upd() {
+    this.x += this.vx; this.y += this.vy;
+    if (this.x < 0 || this.x > W) { this.vx *= -1; }
+    if (this.y < 0 || this.y > H) { this.vy *= -1; }
+    const dx = mx - this.x, dy = my - this.y, dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < 300) {
+      const f = (300 - dist) / 300;
+      this.x -= dx * f * 0.015; this.y -= dy * f * 0.015;
+      this.s = this.bs + f * 5;
+    } else { this.s += (this.bs - this.s) * 0.05; }
+  }
+  draw() {
+    cx.beginPath(); cx.arc(this.x, this.y, this.s, 0, Math.PI * 2);
+    cx.fillStyle = "hsla(" + this.h + ",70%,60%," + this.o + ")";
+    cx.fill();
+  }
+}
+
+for (let i = 0; i < 80; i++) pts.push(new Pt());
+let lns = [];
+for (let i = 0; i < 80; i++) { for (let j = i + 1; j < 80; j++) { lns.push({ i: i, j: j }); } }
+
+function anim() {
+  cx.clearRect(0, 0, W, H);
+  for (const p of pts) { p.upd(); p.draw(); }
+  for (const l of lns) {
+    const a = pts[l.i], b = pts[l.j];
+    const dx = a.x - b.x, dy = a.y - b.y, dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < 180) {
+      cx.beginPath(); cx.moveTo(a.x, a.y); cx.lineTo(b.x, b.y);
+      cx.strokeStyle = "rgba(216,125,74," + (0.06 * (1 - dist / 180)) + ")";
+      cx.lineWidth = 0.5; cx.stroke();
+    }
+  }
+  requestAnimationFrame(anim);
+}
+anim();
+
+onmousemove = e => { mx = e.clientX; my = e.clientY; };
+document.addEventListener("touchmove", e => { mx = e.touches[0].clientX; my = e.touches[0].clientY; }, { passive: true });
+</script>
 </body>
 </html>
